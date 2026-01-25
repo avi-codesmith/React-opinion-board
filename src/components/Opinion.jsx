@@ -1,4 +1,25 @@
+import { use, useActionState } from "react";
+
+import { OpinionsContext } from "../store/opinions-context";
+import { wait } from "@testing-library/user-event/dist/utils";
+
 export function Opinion({ opinion: { id, title, body, userName, votes } }) {
+  const { upvoteOpinion, downvoteOpinion } = use(OpinionsContext);
+
+  async function upVoteAction() {
+    await upvoteOpinion(id);
+  }
+
+  async function downVoteAction() {
+    await downvoteOpinion(id);
+  }
+
+  const [upvoteFormState, upvoteFormAction, upvotePending] =
+    useActionState(upVoteAction);
+
+  const [downvoteFormState, downvoteFormAction, downvotePending] =
+    useActionState(downVoteAction);
+
   return (
     <article>
       <header>
@@ -7,7 +28,10 @@ export function Opinion({ opinion: { id, title, body, userName, votes } }) {
       </header>
       <p>{body}</p>
       <form className="votes">
-        <button>
+        <button
+          disabled={downvotePending || upvotePending}
+          formAction={upvoteFormAction}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -27,7 +51,10 @@ export function Opinion({ opinion: { id, title, body, userName, votes } }) {
 
         <span>{votes}</span>
 
-        <button>
+        <button
+          disabled={downvotePending || upvotePending}
+          formAction={downvoteFormAction}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
