@@ -1,7 +1,7 @@
 import { use, useActionState } from "react";
 
 import { OpinionsContext } from "../store/opinions-context";
-import { wait } from "@testing-library/user-event/dist/utils";
+// import { wait } from "@testing-library/user-event/dist/utils";
 
 export function Opinion({ opinion: { id, title, body, userName, votes } }) {
   const { upvoteOpinion, downvoteOpinion } = use(OpinionsContext);
